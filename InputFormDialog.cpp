@@ -149,7 +149,7 @@ getInput(const QString& title, FormData& data, const FormOptions& options)
                     wlayout->setSpacing(2);
                     
                     auto isChecked = false;
-                    for(const auto& value : values)
+                    for (const auto& value : values)
                     {
                         auto button = new QRadioButton(value);
                         wlayout->addWidget(button);
@@ -282,12 +282,12 @@ getInput(const QString& title, FormData& data, const FormOptions& options)
                         const auto children = widgetMap[pair.first]->children();
                         
                         auto index = 0;
-                        for(const auto& child : children)
+                        for (const auto& child : children)
                         {
                             const auto widget = qobject_cast<QRadioButton*>(child);
-                            if(!widget) continue;
+                            if (!widget) continue;
                             
-                            if(widget->isChecked())
+                            if (widget->isChecked())
                             {
                                 if (options.listReturnsIndex)
                                 {
