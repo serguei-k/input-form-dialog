@@ -54,5 +54,6 @@ if (InputFormDialog::getInput("Example", data, options))
 }
 ```
 
-> Please note that the build has only been tested on OSX with Qt5!
-> Additional converage is forthcoming.
+<img src="https://dl.dropboxusercontent.com/u/37109838/dialog.png" width="150">
+
+Finally, please note that the build has been tested only on OSX with Qt5!
