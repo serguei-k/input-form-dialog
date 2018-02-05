@@ -1,5 +1,5 @@
 ## InputFormDialog
-InputFormDialog is a simple library that provides a multi-type input dialog for Qt.
+InputFormDialog is a simple library that provides a multi-type input dialog for Qt5.
 
 The goal was to make it as easy to use as the static get methods in [QInputDialog](http://doc.qt.io/qt-5/qinputdialog.html) such as `QInputDialog::getText` or `QInputDialog::getInt`.
 
@@ -17,12 +17,12 @@ Currently the following input queries are supported:
 
 Second, you call the modal `FormData::getInput` function by passing the reference to the data object. If the user accepts the dialog then the data object will hold the new values chosen by the user.
 
-To retrieve the new values from `FormData` you should use the templated `FormData::at` method. This method will try and cast the widget value to the desirared type. Note that in a debug build if the provided key does not exist or the cast is impossible then an assertion will be raised.
+To retrieve the new values from `FormData` you should use the templated `FormData::at` method. This method will try and cast the widget value to the desired type. Note that in a debug build if the provided key does not exist or the cast is impossible then an assertion will be raised.
 
 Additionally, you might want to create `FormOptions` object and specify some of the options that control the properties of widgets used by the dialog.
 
 Currently the following options are available:
-- set numeric limits, step and percision
+- set numeric limits, step and precision
 - set whether combo box or radio button group is used
 - set whether the combo box / radio button group returns current item text or index
 
@@ -53,7 +53,3 @@ if (InputFormDialog::getInput("Example", data, options))
     qDebug() << data.at<QVector2D>("Vector2:");
 }
 ```
-
-<img src="https://dl.dropboxusercontent.com/u/37109838/dialog.png" width="150">
-
-Finally, please note that the build has been tested only on OSX with Qt5!
