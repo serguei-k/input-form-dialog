@@ -1,7 +1,7 @@
 ## InputFormDialog
 InputFormDialog is a simple library that provides a multi-type input dialog for Qt5.
 
-The goal was to make it as easy to use as the static get methods in [QInputDialog](http://doc.qt.io/qt-5/qinputdialog.html) such as `QInputDialog::getText` or `QInputDialog::getInt`.
+The purpose of the InputFormDialog is to compliment the static get methods of the [QInputDialog](http://doc.qt.io/qt-5/qinputdialog.html) such as `QInputDialog::getText` or `QInputDialog::getInt`.
 
 ### Details
 Using InputFormDialog is simple. First you need to create a `FormData` object that will define the form entries and their default values.
