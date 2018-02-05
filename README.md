@@ -56,3 +56,4 @@ if (InputFormDialog::getInput("Example", data, options))
     qDebug() << data.at<QVector2D>("Vector2");
 }
 ```
+<img src="https://www.dropbox.com/s/tvl6itcmzxb7hlb/input-form-dialog.jpg?raw=1" width="250" height="250"/>
