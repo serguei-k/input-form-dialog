@@ -18,10 +18,13 @@
 #include <QVector2D>
 #include <QVector3D>
 
+#include "SetColorButton.h"
+
 namespace InputFormDialog
 {
 
-QVariant& FormData::operator[](const QString& key)
+QVariant&
+FormData::operator[](const QString& key)
 {
     for (auto& pair : data_)
     {
@@ -76,9 +79,9 @@ getInput(const QString& title, FormData& data, const FormOptions& options)
     QMap<QString, QWidget*> widgetMap;
     
     auto row = 0;
-    for (auto& pair : data)
+    for (const auto& pair : data)
     {
-        auto label = new QLabel(pair.first);
+        auto label = new QLabel(pair.first + ":");
         layout->addWidget(label, row, 0);
         
         switch (pair.second.type())
@@ -87,6 +90,14 @@ getInput(const QString& title, FormData& data, const FormOptions& options)
             {
                 auto widget = new QCheckBox();
                 widget->setChecked(pair.second.toBool());
+                layout->addWidget(widget, row, 1);
+                widgetMap[pair.first] = widget;
+                break;
+            }
+            case QVariant::Color:
+            {
+                auto widget = new SetColorButton();
+                widget->setColor(pair.second.value<QColor>());
                 layout->addWidget(widget, row, 1);
                 widgetMap[pair.first] = widget;
                 break;
@@ -239,6 +250,12 @@ getInput(const QString& title, FormData& data, const FormOptions& options)
                 {
                     const auto widget = qobject_cast<QCheckBox*>(widgetMap[pair.first]);
                     pair.second = widget->isChecked();
+                    break;
+                }
+                case QVariant::Color:
+                {
+                    const auto widget = qobject_cast<SetColorButton*>(widgetMap[pair.first]);
+                    pair.second = widget->color();
                     break;
                 }
                 case QVariant::Double:

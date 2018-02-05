@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD 14)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
 # Create library target
-add_library(InputFormDialog SHARED src/InputFormDialog.h src/InputFormDialog.cpp)
+add_library(InputFormDialog SHARED src/InputFormDialog.h src/InputFormDialog.cpp src/SetColorButton.h src/SetColorButton.cpp)
 target_link_libraries(InputFormDialog Qt5::Core Qt5::Widgets)
 
 # Uncomment to create the example app target
