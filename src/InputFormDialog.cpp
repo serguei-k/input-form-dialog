@@ -68,7 +68,7 @@ getInput(const QString& title, FormData& data, const FormOptions& options)
 {
     auto dialog = new QDialog();
     dialog->setWindowTitle(title);
-
+    
     auto layout = new QGridLayout(dialog);
     layout->setMargin(2);
     layout->setSpacing(4);

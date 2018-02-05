@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2018 Serguei Kalentchouk et al. All rights reserved.
+# Copyright (c) 2018 Serguei Kalentchouk et al. All rights reserved.
 # Use of this source code is governed by an MIT license that can be found in the LICENSE file.
 cmake_minimum_required(VERSION 3.9)
 
@@ -16,3 +16,7 @@ find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 # Create library target
 add_library(InputFormDialog SHARED src/InputFormDialog.h src/InputFormDialog.cpp)
 target_link_libraries(InputFormDialog Qt5::Core Qt5::Widgets)
+
+# Uncomment to create the example app target
+#add_executable(InputFormDialogExample example/main.cpp)
+#target_link_libraries(InputFormDialogExample InputFormDialog Qt5::Core Qt5::Widgets)
