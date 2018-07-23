@@ -21,3 +21,7 @@ ui_*.h
 
 build/
 .idea/
+
+# Python
+*.pyc
+*.egg-info
