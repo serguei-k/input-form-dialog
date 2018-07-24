@@ -28,7 +28,7 @@ Currently the following options are available:
 from collectictions import OrderedDict
 from Qt import QtGui, QtWidgets
 
-from input_form_dialog import get_input
+from input_form_dialog import FormOptions, get_input
 
 # Define form inputs
 data = OrderedDict()
