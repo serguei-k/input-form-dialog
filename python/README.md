@@ -45,7 +45,7 @@ options.list_displays_as_radios = True
 options.list_returns_index = True
 
 # Ask user for input and retrieve data
-if (InputFormDialog::getInput('Example', data, options)):
+if get_input('Example', data, options):
     print(data['Bool'])
     print(data['Color'])
     print(data['Int'])
