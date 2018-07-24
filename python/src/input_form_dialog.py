@@ -242,12 +242,3 @@ def get_input(title, data, options=FormOptions()):
                                         children[3].value())     
     
     return True
-    
-
-
-
-
-
-
-
-
