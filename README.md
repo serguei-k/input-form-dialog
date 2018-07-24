@@ -4,7 +4,7 @@ InputFormDialog is a simple library that provides a multi-type input dialog for 
 The purpose of the InputFormDialog is to compliment the static get methods of the [QInputDialog](http://doc.qt.io/qt-5/qinputdialog.html) such as `QInputDialog::getText` or `QInputDialog::getInt`.
 
 ### Details
-Using InputFormDialog is simple. First you need to create a `FormData` object that will define the form entries and their default values.
+Using InputFormDialog is simple. First create a `FormData` object that will define the form entries and their default values.
 
 The `FormData` behaves similar to an `std::map`, new entries are added to it by using the subscript operator `FormData::operator[]`. The provided key will be used by the dialog as the label and the edit widget will be chosen based on the value type.
 
@@ -16,7 +16,7 @@ Currently the following input queries are supported:
 - options list
 - 2d/3d vector
 
-Second, you call the modal `FormData::getInput` function by passing the reference to the data object. If the user accepts the dialog then the data object will hold the new values chosen by the user.
+Second, call the modal `FormData::getInput` function by passing the reference to the data object. If the user accepts the dialog then the data object will hold the new values chosen by the user.
 
 To retrieve the new values from `FormData` you should use the templated `FormData::at` method. This method will try and cast the widget value to the desired type. Note that in a debug build if the provided key does not exist or the cast is impossible then an assertion will be raised.
 

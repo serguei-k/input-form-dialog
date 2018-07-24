@@ -34,7 +34,7 @@ FormData::operator[](const QString& key)
         }
     }
     
-    data_.push_back(std::make_pair(key, QVariant()));
+    data_.emplace_back(std::make_pair(key, QVariant()));
     return data_.back().second;
 }
 
@@ -179,11 +179,17 @@ getInput(const QString& title, FormData& data, const FormOptions& options)
                 
                 auto xwidget = new QDoubleSpinBox();
                 xwidget->setButtonSymbols(QAbstractSpinBox::NoButtons);
+                xwidget->setMaximum(double(options.numericMax));
+                xwidget->setMinimum(double(options.numericMin));
+                xwidget->setDecimals(options.numericPrecision);
                 xwidget->setValue(value.x());
                 wlayout->addWidget(xwidget);
                 
                 auto ywidget = new QDoubleSpinBox();
                 ywidget->setButtonSymbols(QAbstractSpinBox::NoButtons);
+                ywidget->setMaximum(double(options.numericMax));
+                ywidget->setMinimum(double(options.numericMin));
+                ywidget->setDecimals(options.numericPrecision);
                 ywidget->setValue(value.y());
                 wlayout->addWidget(ywidget);
                 
@@ -202,16 +208,25 @@ getInput(const QString& title, FormData& data, const FormOptions& options)
                 
                 auto xwidget = new QDoubleSpinBox();
                 xwidget->setButtonSymbols(QAbstractSpinBox::NoButtons);
+                xwidget->setMaximum(double(options.numericMax));
+                xwidget->setMinimum(double(options.numericMin));
+                xwidget->setDecimals(options.numericPrecision);
                 xwidget->setValue(value.x());
                 wlayout->addWidget(xwidget);
                 
                 auto ywidget = new QDoubleSpinBox();
                 ywidget->setButtonSymbols(QAbstractSpinBox::NoButtons);
+                ywidget->setMaximum(double(options.numericMax));
+                ywidget->setMinimum(double(options.numericMin));
+                ywidget->setDecimals(options.numericPrecision);
                 ywidget->setValue(value.y());
                 wlayout->addWidget(ywidget);
                 
                 auto zwidget = new QDoubleSpinBox();
                 zwidget->setButtonSymbols(QAbstractSpinBox::NoButtons);
+                zwidget->setMaximum(double(options.numericMax));
+                zwidget->setMinimum(double(options.numericMin));
+                zwidget->setDecimals(options.numericPrecision);
                 zwidget->setValue(value.z());
                 wlayout->addWidget(zwidget);
                 
@@ -230,119 +245,121 @@ getInput(const QString& title, FormData& data, const FormOptions& options)
     btnLayout->setMargin(2);
     btnLayout->setSpacing(4);
     layout->addLayout(btnLayout, row, 0, 1, 2);
-
+    
     auto ok = new QPushButton("Ok", dialog);
     ok->setDefault(true);
-    QObject::connect(ok, SIGNAL(clicked(bool)), dialog, SLOT(accept()));
+    QObject::connect(ok, &QPushButton::clicked, dialog, &QDialog::accept);
     btnLayout->addWidget(ok);
-
+    
     auto cancel = new QPushButton("Cancel", dialog);
-    QObject::connect(cancel, SIGNAL(clicked(bool)), dialog, SLOT(reject()));
+    QObject::connect(cancel, &QPushButton::clicked, dialog, &QDialog::reject);
     btnLayout->addWidget(cancel);
     
-    if (dialog->exec() == QDialog::Accepted)
+    if (dialog->exec() != QDialog::Accepted)
     {
-        for (auto& pair : data)
+        dialog->deleteLater();
+        return false;
+    }
+    
+    for (auto& pair : data)
+    {
+        switch (pair.second.type())
         {
-            switch (pair.second.type())
+            case QVariant::Bool:
             {
-                case QVariant::Bool:
+                const auto widget = qobject_cast<QCheckBox*>(widgetMap[pair.first]);
+                pair.second = widget->isChecked();
+                break;
+            }
+            case QVariant::Color:
+            {
+                const auto widget = qobject_cast<SetColorButton*>(widgetMap[pair.first]);
+                pair.second = widget->color();
+                break;
+            }
+            case QVariant::Double:
+            {
+                const auto widget = qobject_cast<QDoubleSpinBox*>(widgetMap[pair.first]);
+                pair.second = widget->value();
+                break;
+            }
+            case QVariant::Int:
+            {
+                const auto widget = qobject_cast<QSpinBox*>(widgetMap[pair.first]);
+                pair.second = widget->value();
+                break;
+            }
+            case QVariant::String:
+            {
+                const auto widget = qobject_cast<QLineEdit*>(widgetMap[pair.first]);
+                pair.second = widget->text();
+                break;
+            }
+            case QVariant::StringList:
+            {
+                if (options.listDisplaysAsRadios)
                 {
-                    const auto widget = qobject_cast<QCheckBox*>(widgetMap[pair.first]);
-                    pair.second = widget->isChecked();
-                    break;
-                }
-                case QVariant::Color:
-                {
-                    const auto widget = qobject_cast<SetColorButton*>(widgetMap[pair.first]);
-                    pair.second = widget->color();
-                    break;
-                }
-                case QVariant::Double:
-                {
-                    const auto widget = qobject_cast<QDoubleSpinBox*>(widgetMap[pair.first]);
-                    pair.second = widget->value();
-                    break;
-                }
-                case QVariant::Int:
-                {
-                    const auto widget = qobject_cast<QSpinBox*>(widgetMap[pair.first]);
-                    pair.second = widget->value();
-                    break;
-                }
-                case QVariant::String:
-                {
-                    const auto widget = qobject_cast<QLineEdit*>(widgetMap[pair.first]);
-                    pair.second = widget->text();
-                    break;
-                }
-                case QVariant::StringList:
-                {
-                    if (options.listDisplaysAsRadios)
+                    const auto children = widgetMap[pair.first]->children();
+                    
+                    auto index = 0;
+                    for (const auto& child : children)
                     {
-                        const auto children = widgetMap[pair.first]->children();
+                        const auto widget = qobject_cast<QRadioButton*>(child);
+                        if (!widget) continue;
                         
-                        auto index = 0;
-                        for (const auto& child : children)
+                        if (widget->isChecked())
                         {
-                            const auto widget = qobject_cast<QRadioButton*>(child);
-                            if (!widget) continue;
-                            
-                            if (widget->isChecked())
+                            if (options.listReturnsIndex)
                             {
-                                if (options.listReturnsIndex)
-                                {
-                                    pair.second = index;
-                                }
-                                else
-                                {
-                                    pair.second = widget->text();
-                                }
+                                pair.second = index;
                             }
-                            
-                            index++;
+                            else
+                            {
+                                pair.second = widget->text();
+                            }
                         }
+                        
+                        index++;
+                    }
+                }
+                else
+                {
+                    const auto widget = qobject_cast<QComboBox*>(widgetMap[pair.first]);
+                    if (options.listReturnsIndex)
+                    {
+                        pair.second = widget->currentIndex();
                     }
                     else
                     {
-                        const auto widget = qobject_cast<QComboBox*>(widgetMap[pair.first]);
-                        if (options.listReturnsIndex)
-                        {
-                            pair.second = widget->currentIndex();
-                        }
-                        else
-                        {
-                            pair.second = widget->currentText();
-                        }
+                        pair.second = widget->currentText();
                     }
-                    break;
                 }
-                case QVariant::Vector2D:
-                {
-                    const auto children = widgetMap[pair.first]->children();
-                    const auto xwidget = qobject_cast<QDoubleSpinBox*>(children.at(1));
-                    const auto ywidget = qobject_cast<QDoubleSpinBox*>(children.at(2));
-                    pair.second = QVector2D(xwidget->value(), ywidget->value());
-                    break;
-                }
-                case QVariant::Vector3D:
-                {
-                    const auto children = widgetMap[pair.first]->children();
-                    const auto xwidget = qobject_cast<QDoubleSpinBox*>(children.at(1));
-                    const auto ywidget = qobject_cast<QDoubleSpinBox*>(children.at(2));
-                    const auto zwidget = qobject_cast<QDoubleSpinBox*>(children.at(3));
-                    pair.second = QVector3D(xwidget->value(), ywidget->value(), zwidget->value());
-                    break;
-                }
-                default:
-                    break;
+                break;
             }
+            case QVariant::Vector2D:
+            {
+                const auto children = widgetMap[pair.first]->children();
+                const auto xwidget = qobject_cast<QDoubleSpinBox*>(children.at(1));
+                const auto ywidget = qobject_cast<QDoubleSpinBox*>(children.at(2));
+                pair.second = QVector2D(xwidget->value(), ywidget->value());
+                break;
+            }
+            case QVariant::Vector3D:
+            {
+                const auto children = widgetMap[pair.first]->children();
+                const auto xwidget = qobject_cast<QDoubleSpinBox*>(children.at(1));
+                const auto ywidget = qobject_cast<QDoubleSpinBox*>(children.at(2));
+                const auto zwidget = qobject_cast<QDoubleSpinBox*>(children.at(3));
+                pair.second = QVector3D(xwidget->value(), ywidget->value(), zwidget->value());
+                break;
+            }
+            default:
+                break;
         }
-        
-        return true;
     }
     
-    return false;
+    dialog->deleteLater();
+    return true;
 }
 
 }

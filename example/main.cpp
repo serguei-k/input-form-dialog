@@ -4,15 +4,14 @@
 
 #include <QColor>
 #include <QDebug>
+#include <QPushButton>
 #include <QVector2D>
 #include <QVector3D>
 
 #include "../src/InputFormDialog.h"
 
-int main(int argc, char* argv[])
+void ask()
 {
-    QApplication app(argc, argv);
-    
     // Define form inputs
     InputFormDialog::FormData data;
     data["Bool"] = true;
@@ -37,6 +36,15 @@ int main(int argc, char* argv[])
         qDebug() << data.at<int>("ComboBox");
         qDebug() << data.at<QVector2D>("Vector2");
     }
+}
+
+int main(int argc, char* argv[])
+{
+    QApplication app(argc, argv);
+    
+    auto button = new QPushButton("Ask Me");
+    QObject::connect(button, &QPushButton::clicked, ask);
+    button->show();
     
     return app.exec();
 }

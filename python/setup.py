@@ -14,6 +14,6 @@ setup(
     py_modules=['input_form_dialog'],
     name='input_form_dialog',
     url='https://github.com/serguei-k/input-form-dialog/python',
-    version='1.0.4',
+    version='1.0.0',
     zip_safe=False
 )
