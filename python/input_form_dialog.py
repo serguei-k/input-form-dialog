@@ -1,7 +1,7 @@
 # Copyright (c) 2018 Serguei Kalentchouk. All rights reserved.
 # Use of this source code is governed by an MIT license that can be found in the LICENSE file.
 from collections import OrderedDict
-from Qt import QtGui, QtWidgets
+from Qt import QtCore, QtGui, QtWidgets
 
 
 class FormOptions(object):
@@ -29,8 +29,8 @@ class ColorSwatchButton(QtWidgets.QPushButton):
     def __init__(self):
         super(ColorSwatchButton, self).__init__()
         
-        self.setAutoFillBackground(True);
-        self.setFlat(True);
+        self.setAutoFillBackground(True)
+        self.setFlat(True)
         
         self._color = QtGui.QColor()
         
@@ -77,7 +77,7 @@ def get_input(title, data, options=FormOptions()):
     
     Args:
        title (str): Dialog title
-       data (OrderedDict): Input data to build tha dialog for
+       data (dict | OrderedDict): Input data to build tha dialog for
        options(FormOptions): Options to control dialog behavior
     
     Returns:
@@ -202,7 +202,8 @@ def get_input(title, data, options=FormOptions()):
     cancel_button.clicked.connect(dialog.reject)
     button_layout.addWidget(cancel_button)
     
-    if dialog.exec_() == QtWidgets.QDialog.Rejected:
+    if dialog.exec_() != QtWidgets.QDialog.Accepted:
+        dialog.deleteLater()
         return False
     
     for key in data:
@@ -239,6 +240,7 @@ def get_input(title, data, options=FormOptions()):
             children = widgets[key].children()
             data[key] = QtGui.QVector3D(children[1].value(),
                                         children[2].value(),
-                                        children[3].value())     
+                                        children[3].value())
     
+    dialog.deleteLater()
     return True

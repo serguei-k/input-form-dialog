@@ -4,17 +4,17 @@ InputFormDialog is a simple module that provides a multi-type input dialog for Q
 The purpose of the InputFormDialog is to compliment the static get methods of the [QInputDialog](https://doc-snapshots.qt.io/qtforpython/PySide2/QtWidgets/QInputDialog.html) such as `QInputDialog.getText` or `QInputDialog.getInt`.
 
 ### Details
-Using InputFormDialog is simple. First you need to create an OrderedDict that will define the form entries and their default values.
+Using InputFormDialog is simple. First create a dictionary that will define the form entries and their default values. If the order of input widgets is important, use `OrderedDict`.
 
 Currently the following input queries are supported:
 - boolean
 - color
-- numeric (int/float)
+- numeric
 - text
 - options list
 - 2d/3d vector
 
-Second, you call the `get_input()` function and pass the data object as an argument. If the user accepts the dialog then the data object will hold the new values chosen by the user.
+Second, call the `get_input()` function and pass the data object as an argument. If the user accepts the dialog then the data object will hold the new values chosen by the user.
 
 Additionally, you might want to create `FormOptions` object and specify some of the options that control the properties of widgets used by the dialog.
 
@@ -25,6 +25,7 @@ Currently the following options are available:
 
 ### Example
 ```python
+# QApplication must be running prior to calling get_input
 from collectictions import OrderedDict
 from Qt import QtGui, QtWidgets
 
