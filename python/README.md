@@ -26,7 +26,7 @@ Currently the following options are available:
 ### Example
 ```python
 # QApplication must be running prior to calling get_input
-from collectictions import OrderedDict
+from collections import OrderedDict
 from Qt import QtGui, QtWidgets
 
 from input_form_dialog import FormOptions, get_input
