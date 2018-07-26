@@ -16,7 +16,7 @@ Currently the following input queries are supported:
 - options list
 - 2d/3d vector
 
-Second, call the modal `FormData::getInput` function by passing the reference to the data object. If the user accepts the dialog then the data object will hold the new values chosen by the user.
+Second, call the `getInput` function by passing the reference to the data object. If the user accepts the dialog then the data object will hold the new values chosen by the user.
 
 To retrieve the new values from `FormData` you should use the templated `FormData::at` method. This method will try and cast the widget value to the desired type. Note that in a debug build if the provided key does not exist or the cast is impossible then an assertion will be raised.
 
